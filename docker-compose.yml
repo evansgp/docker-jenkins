@@ -1,15 +1,22 @@
 version: "3"
 services:
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: proxy
+  jenkins:
+    image: jenkins:alpine
+    container_name: jenkins
+    restart: always
     networks:
       - outside
     ports:
-      - "80:80"
+      - "50000:50000"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - jenkins-config:/var/jenkins_home
+    environment:
+      - VIRTUAL_HOST=jenkins.gareth.id.au
+      - VIRTUAL_PORT=8080
 networks:
   outside:
     external:
       name: outside
+volumes:
+  jenkins-config:
+    driver: convoy
